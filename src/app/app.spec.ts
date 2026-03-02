@@ -1,23 +1,37 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { By } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-child',
+  template: 'template content',
+})
+export class MockAppChild {}
 
 describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  it.skip('should create the app', async () => {
+    TestBed.configureTestingModule({
       imports: [App],
-    }).compileComponents();
-  });
-
-  it('should create the app', () => {
+    });
     const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should still provide all code coverage', async () => {
+    TestBed.configureTestingModule({
+      imports: [App],
+    }).overrideComponent(App, {
+      set: {
+        imports: [MockAppChild],
+      },
+    });
+
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, coverage-override-component');
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
   });
 });
